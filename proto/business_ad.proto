@@ -1,0 +1,10 @@
+import "xbuiltin-options.proto";
+
+package ad.rtb;
+
+message business_ad {
+        required bytes business = 1;
+        repeated uint64 unitid = 2;
+        repeated uint64 bid = 3;
+        option (xbuiltin.xkey) = "business";
+};

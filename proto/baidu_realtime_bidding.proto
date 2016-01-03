@@ -1,0 +1,487 @@
+// Copyright 2013-2015 Baidu Inc. All Rights Reserved.
+//
+// 文件内容: baidu exchange service 实时竞价协议文件
+//
+package AdxRtb;
+
+message BidRequest {
+  // 请求ID，唯一标识本次请求，明文字符串
+  required string id = 1;
+
+  // **** 用户信息 ****
+  // 用户IP地址，点分十进制字符串
+  optional string ip = 2;
+  // User-Agent
+  optional string user_agent = 3;
+
+  // 用户ID，该字段将于2015年4月30日停止使用
+  optional string baidu_user_id = 4;
+  // 用户ID版本，该字段将于2015年4月30日停止使用
+  optional int32 baidu_user_id_version = 5;
+
+  // 用户ID
+  // 在2015年4月30日之前将会同时发送版本1和版本2的cookie
+  // 从2015年5月1日起只发送版本2的cookie
+  message BaiduId {
+      optional string baidu_user_id = 1;
+      optional int32 baidu_user_id_version = 2;
+  }
+  repeated BaiduId baidu_id_list = 8;
+
+  // 用户分类
+  repeated int64 user_category = 6;
+  // 用户性别
+  enum Gender {
+    UNKNOWN = 0;
+    MALE = 1;
+    FEMALE = 2;
+  }
+  // 注：本字段已废弃，不再传递任何值。请勿使用
+  // 用户如需获得end-user的性别信息，请采用user_category字段，并
+  // 参照其值域说明。
+  optional Gender gender = 7;
+  // 页面语言
+  optional string detected_language = 9;
+  // flash版本
+  optional string flash_version = 10;
+
+  // **** 位置信息 ****
+  message Geo {
+    // 经纬度信息
+    message Coordinate {
+        // 经纬度坐标标准  
+        enum Standard {
+            // 百度地图的经纬度坐标标准
+            BD_09 = 0;
+            // 国测局制定的经纬度坐标标准
+            GCJ_02 = 1;
+            // 国际经纬度坐标标准 
+            WGS_84 = 2;
+            // 百度地图的墨卡坐标标准,以米为单位
+            BD_09_LL = 3;
+        }
+        // 地图坐标标准
+        optional Standard standard = 1;
+        // 维度
+        optional float latitude = 2;
+        // 经度
+        optional float longitude = 3;
+    }
+    repeated Coordinate user_coordinate = 1;
+
+    // 用户位置信息
+    message UserLocation {
+        // 省份
+        optional string province = 1;
+        // 城市
+        optional string city = 2;
+        // 区县
+        optional string district = 3;
+        // 街道
+        optional string street = 4;
+    }
+    optional UserLocation user_location = 2;
+  }  
+  optional Geo user_geo_info = 28;
+
+  // **** 页面信息 ****
+  // 当前页面URL
+  optional string url = 11;
+  // 请求的refer
+  optional string referer = 12;
+  // 网站分类
+  optional int32 site_category = 13;
+  // 网站质量类型
+  optional int32 site_quality = 14;
+  // 页面类型
+  optional int32 page_type = 15;
+  // 页面关键词
+  repeated string page_keyword = 17;
+  // 页面内容质量
+  optional int32 page_quality = 18;
+  // 页面分类
+  optional int32 page_vertical = 21;
+  // 发布商不允许的广告行业
+  repeated int32 excluded_product_category = 19 [packed=true];
+
+  // **** 移动设备信息 ****
+  message Mobile {
+    // 百度唯一标示移动设备的编号
+    optional string DEPRECATED_device_id = 1;      
+
+    // 新版移动设备序列号标识字段。允许同时存储多个序列号
+    message MobileID {
+        // 移动设备ID的类型
+        enum IDType {
+            // 未知
+            UNKNOWN = 0;
+            // IMEI
+            IMEI = 1;
+            // MAC地址
+            MAC = 2;
+        }
+        optional IDType type = 1; // 序列号类型
+        optional string id = 2;   // 序列号
+    }
+    repeated MobileID id = 13;
+
+    // 设备类型定义
+    enum MobileDeviceType {
+        UNKNOWN_DEVICE = 0;
+        HIGHEND_PHONE = 1;
+        TABLET = 2;
+    }
+    // 设备类型
+    optional MobileDeviceType device_type = 2;
+    // 移动平台名，例如android，iphone等等
+    enum OS {
+        UNKNOWN_OS = 0;
+        IOS = 1;
+        ANDROID = 2;
+        WINDOWS_PHONE = 3;
+    }
+    optional OS platform = 3 [default = UNKNOWN_OS];
+    // 移动操作系统版本号
+    // 例如 Android 2.1, major, micro分别是2,1
+    // 例如 Iphone 4.2.1，major, minor, micro分别是4,2,1
+    message DeviceOsVersion {
+        optional int32 os_version_major = 1;
+        optional int32 os_version_minor = 2;
+        optional int32 os_version_micro = 3;
+    };
+    optional DeviceOsVersion os_version = 4;
+    // 设备品牌
+    optional string brand = 5;
+    // 设备机型
+    optional string model = 6;
+    // 设备屏宽
+    optional int32 screen_width = 7;
+    // 设备屏高
+    optional int32 screen_height = 8;
+    // 设备屏幕像素密度
+    optional float screen_density = 15;
+    // 运营商编号（MCC+MNC编号）
+    // 例如中国移动 46000
+    // 前三位是Mobile Country Code
+    // 后两位是Mobile Network Code
+    optional int64 carrier_id = 9;
+    // 无线网络类型
+    enum WirelessNetworkType {
+        UNKNOWN_NETWORK = 0;
+        WIFI = 1;
+        MOBILE_2G = 2;
+        MOBILE_3G = 3;
+        MOBILE_4G = 4;
+    }
+    optional WirelessNetworkType wireless_network_type = 10;
+
+    // 移动设备上为广告控制提供的ID
+    optional string DEPRECATED_for_advertising_id = 11;
+
+    // 新版移动设备用户识别号字段，允许多种类型同时存在
+    // 推荐使用本字段获取用户ID，原字段会逐步废弃。
+    message ForAdvertisingID {
+        enum IDType {
+            UNKNOWN = 0;    // 未知
+            ANDROID_ID = 4; // Android适用
+            IDFA = 5;       // IOS适用
+        }
+        optional IDType type = 1; // ID类型
+        optional string id = 2; // ID内容
+    }
+    repeated ForAdvertisingID for_advertising_id = 14;
+
+    // **** 移动应用信息 ****
+    message MobileApp {
+        // 百度移动联盟为该App分配的app id
+        optional string app_id = 1;
+        // 如果来自苹果商店，则直接是app-store id
+        // 如果来自Android设备，则是package的全名
+        optional string app_bundle_id = 2;
+        // App应用分类
+        optional int32 app_category = 3;
+        // App开发者ID
+        optional int32 app_publisher_id = 4;
+        // App允许的交互类型定义
+        // 电话、下载
+        enum AppInteractionType {
+            TELEPHONE = 0;
+            DOWNLOAD = 1;
+        }
+        // App允许的交互类型
+        repeated AppInteractionType app_interaction_type = 5;
+    }
+    // 移动应用信息，当流量来自App时该字段非空
+    optional MobileApp mobile_app = 12;
+  }
+  // 移动设备信息，当流量来自移动设备时该字段非空
+  optional Mobile mobile = 29;
+
+  // 视频流量的媒体信息
+  message Video {
+    // 视频的标题
+    optional string title = 1;
+    // 视频的标签
+    repeated string tags  = 2;
+    // 视频的播放时长
+    optional int32  content_length = 3;
+    //频道信息
+    repeated int64 channel_id = 4;
+  }
+  optional Video video = 30;
+
+  // **** 广告位信息 ****
+  message AdSlot {
+    // 广告位ID, 全局唯一id
+    optional uint64 ad_block_key = 1;
+    // 当前页面广告位顺序id，同一页面从1开始
+    optional int32 sequence_id = 2;
+    // 展示类型
+    optional int32 adslot_type = 3;
+    // 宽
+    optional int32 width = 4;
+    // 高
+    optional int32 height = 5;
+    // 广告位实际宽度
+    optional int32 actual_width = 18;
+    // 广告位实际高度
+    optional int32 actual_height = 19;
+    // 展示位置
+    optional int32 slot_visibility = 6;
+    // 发布商允许的创意类型
+    repeated int32 creative_type = 7 [packed=true];
+    // 发布商不允许的landing page url
+    repeated string excluded_landing_page_url = 8;
+    // 媒体保护设置信息的ID
+    repeated fixed64 publisher_settings_list_id = 14;
+    // 发布商设置的底价，单位分
+    optional int32 minimum_cpm = 9;
+    // 视频广告的最大时长。该字段将于2015年6月3日后停止使用，6月4日开始使用新的字段
+    optional int32 max_video_duration = 10;
+    // 视频广告的最小时长。该字段将于2015年6月3日后停止使用，6月4日开始使用新的字段
+    optional int32 min_video_duration = 11;
+    // 视频广告的播出延时， 0及正整数表示前贴，-1表示中贴，-2表示后贴。
+    // 该字段将于2015年6月3日后停止使用，6月4日开始使用新的字段
+    optional int32 video_start_delay = 12;
+
+    // 建议使用新的字段接入video
+    message VideoInfo {
+        // 视频广告的最大时长
+        optional int32 max_video_duration = 1;
+        // 视频广告的最小时长
+        optional int32 min_video_duration = 2;
+        // 视频广告的播出延时， 0及正整数表示前贴，-1表示中贴，-2表示后贴
+        optional int32 video_start_delay = 3;
+    }
+    optional VideoInfo video_info = 15;
+
+    message LinkUnitInfo {
+        // 链接单元广告候选样式
+        // 在request中，BES会计算在此次请求中最优的广告样式集合，并将此集合
+        // 发送给DSP，最后使用的样式将根据DSP返回的关键词组合进行确定。
+        repeated int32 style_type = 1;
+        // 链接单元广告可以返回的关键词个数
+        optional int32 req_keyword_num = 2;
+        // BES推荐使用的关键词, dsp可选择使用，也可以使用自己认为更好的关键词, 使用utf-8编码
+        repeated string proposed_keyword = 3;
+    }
+    optional LinkUnitInfo link_unit_info = 16;
+
+    // 优先交易信息
+    message PreferredOrderInfo {
+        message PreferredOrder {
+            // 优先交易ID
+            optional string order_id = 1;
+            // 该优先交易的交易价格
+            optional int64 fixed_cpm = 2;
+        }
+        // 一次请求可能包含多个优先交易
+        repeated PreferredOrder preferred_orders = 1;
+        // 允许优先交易的同时，是否允许竞价
+        optional bool allow_auction = 2 [default=true];
+    }
+    optional PreferredOrderInfo preferred_order_info = 13;
+
+    // 该广告位允许的扩展创意信息
+    message ExpandCreativeInfo {
+        // 扩展动作类型
+        enum ActionType {
+            // 悬停
+            HOVER = 1;
+            // 点击
+            CLICK = 2;
+            // 加载
+            LOAD = 3;
+        }
+        repeated ActionType expand_action_type = 1;
+        // 扩展方向
+        enum Direction {
+            EXPAND_NONE = 0;
+            // 向上扩展
+            EXPAND_UP = 1;
+            // 向下扩展
+            EXPAND_DOWN = 2;
+            // 向左扩展
+            EXPAND_LEFT = 3;
+            // 向右扩展
+            EXPAND_RIGHT = 4;
+        };
+        optional Direction expand_direction = 2;
+        // 允许的创意类型
+        repeated int32 expand_creative_type = 3 [packed=true];
+        // 扩展后的广告位宽度
+        optional int32 expand_width = 4;
+        // 扩展后的广告位高度
+        optional int32 expand_height = 5;
+        // 扩展展现时长
+        optional int32 expand_duration = 6;
+    }
+    optional ExpandCreativeInfo expand_creative_info = 17;
+  }
+
+  // 默认每次请求一个广告位
+  repeated AdSlot adslot = 20;
+
+  // **** 系统使用 ****
+  optional bool is_test = 26 [default=false];
+  optional bool is_ping = 27 [default=false];
+}
+
+message BidResponse {
+    // 返回ID，将请求中的id赋值给返回id，便于session trace
+    required string id = 1;
+
+    // **** 竞价广告信息 ****
+    message Ad {
+        // 广告位顺序ID
+        optional int32 sequence_id = 1;
+        // 创意ID
+        // 对于静态创意（dsp将创意上传到BES, BES进行广告渲染），
+        // creative_id唯一标识DSP上传到BES的每个创意（目前仅支持一个创意）。
+        // 对于动态创意，creative_id唯一标识html snippet。BES会对动态创
+        // 意的物料、监测地址及landing page等进行审核。DSP应保证含有相同物料、监测地址及landing page
+        // 的html_snippet的snippet id相同，避免重复审核。但当html snippet中的物料、监测地址及landing page
+        // 发生改变时，需要生成新的creative_id。
+        // 对于关键词，creative_id唯一标识关键词。
+        optional int64 creative_id = 2;
+        // html_snippet字段仅在返回动态创意时使用。DSP将拼装完成的
+        // 创意及其物料拼装到html中，返回给BES。
+        // BES经过判断，认为*拥有html_snippet字段的响应*属于动态创意，
+        // 并通过此类字段获取必须的物料信息。相应数据中如遗漏字段，则
+        // BES不能保证其参与竞价。
+        //
+        // 如何获知点击信息: 
+        // html snippet代码。该字段中需要填充click url的位置应填充
+        // 宏%%CLICK_URL_{N}%%（这里{N}从0开始，应使用具体的序号代替，
+        // 并与target_url中的顺序一致），并将click url填写至
+        // target_url字段。BES会根据DSP的target_url
+        // 构建最终click url之后，用其替换该宏。
+        // 如下html中包含两个创意，则需要注册两个宏%%CLICK_URL_0%%和
+        // %%CLICK_URL_1%%。并在target_url字段中顺序赋值。
+        // std::string html("<BODY>...<a href="%%CLICK_URL_0%%"/>.."
+        //  "<a href="%%CLICK_URL_1%%"/>...</BODY>"
+        // ad.set_html_snippet(html);
+        // ad.add_target_url("http://click.dsp.com?idea=ad1...");
+        // ad.add_target_url("http://click.dsp.com?idea=ad2...");
+        // 宏的错误（如顺序、遗漏等）或者target_url的赋值错
+        // 误都会导致BES对target_url填充出错。
+        //
+        // 如何获知竞价后的计价信息: 
+        // 如DSP需要获知竞价成功后创意的cpm，可在期望的monitor_url
+        // 字段特定位置添加宏%%PRICE%%。BES通过替换会使用cpm替换该宏。
+        // 例: 
+        // http://wins.dsp.com?key1=val1&&cpm=%%PRICE%%...
+        // 仅动态创意需要填充
+        optional string html_snippet = 7;
+        message LinkUnitKeyword {
+            // 竞价链接单元广告的关键词, utf-8编码，dsp需要为每个竞价的关键词设置如下信息
+            // creative_id: 创意id
+            // max_cpm: 关键词报价，单位分
+            // selected_style_type: 关键词竞价的样式
+            // advertiser_id: 广告主id
+            // category: 关键词所属行业
+            // landing_page: 着陆页
+            // target_url: 点击串
+            // monitor_urls: 展示监测
+            // type: 创意的物料类型
+            optional string keyword = 1;
+            // 关键词竞价的样式
+            // dsp为关键词选择的样式id,可以从请求中的候选样式中选择多个
+            // 最终的样式是由bes考量多重因素从候选样式中选择的最优样式进行展现
+            // 为空表示可以适用于request中的所有样式,如果dsp对样式无特别要求
+            // 建议为空,dsp不设置该字段,可以提高胜出率
+            repeated int32 selected_style_type = 2;
+        }
+        optional LinkUnitKeyword link_unit_keyword = 18;
+        // 如果BidRequest的AdSlot中包含ExpandCreativeInfo信息，
+        // 则DSP可以在BidResponse中返回如下结构表示返回来扩展创意。
+        // 目前BES对扩展创意的支持仅限于动态创意，亦即填充了html_snippet。
+        message ExpandCreativeInfo {
+            // 创意宽
+            optional int32 creative_width = 1;
+            // 创意高
+            optional int32 creative_height = 2;
+            // 着陆页
+            optional string creative_landing_page = 3;
+            // 物料
+            optional int32 creative_type = 4;
+        }
+        optional ExpandCreativeInfo expand_creative_info = 19;
+        // 广告主id。动态创意及关键词需要填充
+        // 动态创意要求一个html snippet的所有广告属于同一个广告主。
+        optional uint64 advertiser_id = 8;
+        // 物料尺寸 - 宽度。需与请求中的尺寸一致
+        // 仅动态创意需要填充
+        optional int32  width = 9;
+        // 物料尺寸 - 高度。需与请求中的尺寸一致
+        // 仅动态创意需要填充
+        optional int32  height = 10;
+        // 创意所属行业的行业id。本字段的意义与静态创意中入库物料所需
+        // 行业id相同。
+        // 动态创意和关键词需要填充
+        optional int32  category = 11;
+        // 创意的物料类型
+        // 动态创意和关键词需要填充
+        optional int32  type = 12;
+        // 创意的landing page。要求所有创意的landing page拥有相同的域，
+        // 同时landing page应为target_url的最后一次跳转。
+        // 注意: 这里仅填landing page的domain信息即可。如: 
+        // http://landing_page.advertiser.com/example.php?param1=...
+        // 如上url的landing page应填入landing_page.advertiser.com。
+        // 动态创意和关键词需要填充
+        optional string landing_page = 13;
+        // 创意的click url。响应中含有多个创意的情况下，每个创意click
+        // url的顺序应与创意在html snippet中的顺序一致。BES将顺序进行
+        // click url的替换。
+        // 如该顺序不正确，将引发点击的统计偏差。
+        // 动态创意和关键词需要填充
+        repeated string target_url = 14;
+        // 曝光监测。
+        // 关键词需要填充
+        repeated string monitor_urls = 17;
+        // 最高竞价，单位分
+        optional int32 max_cpm = 3;
+        // 扩展参数
+        optional string extdata = 5;
+        // 是否进行cookie mapping
+        optional bool is_cookie_matching = 6;
+        // 如果采用优先交易，该交易的ID
+        optional string preferred_order_id = 15;
+
+        extensions 100 to 199;
+    }
+    // 目前只支持一个竞价广告返回
+    repeated Ad ad = 2;
+
+    // **** 系统使用 ****
+    // debug接口
+    optional string debug_string = 3;
+    // DSP处理时间
+    optional int32 processing_time_ms = 4;
+
+}
+
+// for our system
+extend BidResponse.Ad {
+    optional int32 ad_status = 101;
+}

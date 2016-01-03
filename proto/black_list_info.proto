@@ -1,0 +1,22 @@
+import "xbuiltin-options.proto";
+
+package ad.rtb;
+
+//CREATE TABLE `black_list` (
+//  `id` int(11) NOT NULL AUTO_INCREMENT,
+//  `id_type` varchar(100) NOT NULL,
+//  `id_value` varchar(500) NOT NULL,
+//  `cdate` datetime NOT NULL,
+//  `udate` datetime NOT NULL,
+//  PRIMARY KEY (`id`)
+//) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8
+
+message black_list_info {
+    required uint64 id = 1;
+    required bytes id_type = 2;
+    required bytes id_value = 3;
+    required bytes cdate = 4;
+    required bytes udate = 5;
+
+    option (xbuiltin.xkey) = "id_value";
+};

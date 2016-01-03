@@ -1,0 +1,9 @@
+import "xbuiltin-options.proto";
+
+package ad.rtb;
+
+message stop_word {
+        required bytes word = 1;
+        optional int32 flag = 2;
+        option (xbuiltin.xkey) = "word";
+};

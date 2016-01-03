@@ -1,0 +1,43 @@
+import "xbuiltin-options.proto";
+
+package ad.rtb;
+
+//create table if not exists `idea` (
+//  `level` int(11) DEFAULT '4',
+//  `ideaid` int(11) NOT NULL,
+//  `unitid` int(11) NOT NULL,
+//  `planid` int(11) NOT NULL,
+//  `userid` int(11) NOT NULL,
+//  `title` varchar(1000) DEFAULT NULL,
+//  `desc1` varchar(1000) DEFAULT NULL,
+//  `url` varchar(1000) NOT NULL,
+//  `showurl` varchar(1000) DEFAULT NULL,
+//  `creative_type` int(11) DEFAULT '1' NOT NULL,
+//  `width` int(11) DEFAULT '0' NOT NULL,
+//  `height` int(11) DEFAULT '0' NOT NULL,
+//  `path` varchar(200) CHARACTER SET gbk DEFAULT NULL,
+//  `cdate` datetime NOT NULL,
+//  `udate` datetime NOT NULL,
+//  PRIMARY KEY (`ideaid`)
+//) ENGINE=InnoDB DEFAULT CHARSET=gbk"""
+
+
+message idea_info {
+    optional uint64 level = 1;
+    required uint64 ideaid = 2;
+    required uint64 unitid = 3;
+    required uint64 planid = 4;
+    required uint64 userid = 5;
+    optional bytes title = 6;
+    optional bytes desc1 = 7;
+    optional bytes url = 8;
+    optional bytes showurl = 9;
+    required uint32 creative_type = 10;
+    required uint32 width = 11;
+    required uint32 height = 12;
+    required bytes path = 13;
+    required bytes cdate = 14;
+    required bytes udate = 15;
+
+    option (xbuiltin.xkey) = "ideaid";
+};

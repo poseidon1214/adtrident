@@ -1,0 +1,32 @@
+import "xbuiltin-options.proto";
+
+package ad.rtb;
+
+//create table if not exists `unit` (
+//  `level` int(11) DEFAULT '3',
+//  `unitid` int(11) NOT NULL,
+//  `planid` int(11) NOT NULL,
+//  `userid` int(11) NOT NULL,
+//  `unitbid` int(11) NOT NULL,
+//  `negative` varchar(1000) DEFAULT '0',
+//  `exactnegative` varchar(1000) DEFAULT '0',
+//  `name` varchar(1000) NOT NULL,
+//  `cdate` datetime NOT NULL,
+//  `udate` datetime NOT NULL,
+//  PRIMARY KEY (`unitid`)
+//) ENGINE=InnoDB DEFAULT CHARSET=gbk"""
+
+message unit_info {
+    optional uint64 level = 1;
+    required uint64 unitid = 2;
+    required uint64 planid = 3;
+    required uint64 userid = 4;
+    required uint64 unitbid = 5;
+    optional bytes negative = 6;
+    optional bytes exactnegative = 7;
+    required bytes name = 8;
+    required bytes cdate = 9;
+    required bytes udate = 10;
+
+    option (xbuiltin.xkey) = "unitid";
+};

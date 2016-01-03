@@ -1,0 +1,10 @@
+import "xbuiltin-options.proto";
+
+package ad.rtb;
+
+message unit_idea {
+    required uint64 unitid = 1;
+    repeated uint64 ideaid = 2;
+
+    option (xbuiltin.xkey) = "unitid";
+};

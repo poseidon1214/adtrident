@@ -1,0 +1,13 @@
+package AdxRtb;
+
+option cc_generic_services = true;
+
+message HttpRequest {
+}
+
+message HttpResponse {
+}
+
+service WinNotice {
+    rpc record(HttpRequest) returns (HttpResponse);
+};

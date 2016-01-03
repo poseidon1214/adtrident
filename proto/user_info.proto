@@ -1,0 +1,36 @@
+import "xbuiltin-options.proto";
+
+package ad.rtb;
+
+//create table if not exists `user`(
+//  `level` int(11) DEFAULT '1',
+//  `userid` int(11) NOT NULL,
+//  `ustatid` int(11) NOT NULL DEFAULT '0',
+//  `ipblack` varchar(1000) DEFAULT '0',
+//  `region` varchar(1000) CHARACTER SET gbk DEFAULT '0',
+//  `budget` bigint(20) DEFAULT '0',
+//  `budget_all` bigint(20) DEFAULT '0',
+//  `consume` bigint(20) DEFAULT '0',
+//  `consume_all` bigint(20) DEFAULT '0',
+//  `name` varchar(1000) NOT NULL,
+//  `cdate` datetime NOT NULL,
+//  `udate` datetime NOT NULL,
+//  PRIMARY KEY (`userid`)
+//) ENGINE=InnoDB DEFAULT CHARSET=gbk;
+
+message user_info {
+    optional uint64 level = 1;
+    required uint64 userid = 2;
+    required uint64 ustatid = 3;
+    required bytes ipblack = 4;
+    required bytes region = 5;
+    required uint64 budget = 6;
+    required uint64 budget_all = 7;
+    required uint64 consume = 8;
+    required uint64 consume_all = 9;
+    required bytes name = 10;
+    required bytes cdate = 11;
+    required bytes udate = 12;
+
+    option (xbuiltin.xkey) = "userid";
+};

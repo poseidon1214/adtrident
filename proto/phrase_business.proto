@@ -1,0 +1,10 @@
+import "xbuiltin-options.proto";
+
+package ad.rtb;
+
+message phrase_business {
+        required bytes phrase = 1;
+        required bytes business = 2;
+        required float weight = 3;
+        option (xbuiltin.xkey) = "phrase";
+};

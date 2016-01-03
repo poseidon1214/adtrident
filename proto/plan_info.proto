@@ -1,0 +1,48 @@
+import "xbuiltin-options.proto";
+
+package ad.rtb;
+
+//create table if not exists `plan` (
+//  `level` int(11) DEFAULT '2',
+//  `planid` int(11) NOT NULL,
+//  `userid` int(11) DEFAULT NULL,
+//  `planstatid` int(11) NOT NULL DEFAULT '0',
+//  `ipblack` varchar(1000) DEFAULT '0',
+//  `negative` varchar(1000) DEFAULT '0',
+//  `cyc` varchar(1000) DEFAULT '0',
+//  `region` varchar(1000) CHARACTER SET gbk DEFAULT '0',
+//  `budget` bigint(20) DEFAULT '0',
+//  `consume` bigint(20) DEFAULT '0',
+//  `gender` int(11) DEFAULT '0',
+//  `taste` varchar(1000) DEFAULT '0',
+//  `sitecate` varchar(1000) DEFAULT '0',
+//  `exactnegative` varchar(1000) DEFAULT '0',
+//  `flowtype` varchar(100) DEFAULT NULL,
+//  `name` varchar(1000) NOT NULL,
+//  `cdate` datetime NOT NULL,
+//  `udate` datetime NOT NULL,
+//  PRIMARY KEY (`planid`)
+//) ENGINE=InnoDB DEFAULT CHARSET=gbk
+
+message plan_info {
+    optional uint64 level = 1;
+    required uint64 planid = 2;
+    required uint64 userid = 3;
+    required uint64 planstatid = 4;
+    optional bytes ipblack = 5;
+    optional bytes negative = 6;
+    optional bytes cyc = 7;
+    optional bytes region = 8;
+    optional uint64 budget = 9;
+    optional uint64 consume = 10;
+    optional uint64 gender = 11;
+    required bytes taste = 12;
+    required bytes sitecate = 13;
+    required bytes exactnegative = 14;
+    required bytes flowtype = 15;
+    required bytes name = 16;
+    required bytes cdate = 17;
+    required bytes udate = 18;
+
+    option (xbuiltin.xkey) = "planid";
+};
