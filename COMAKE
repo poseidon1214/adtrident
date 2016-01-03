@@ -1,0 +1,62 @@
+#edit-mode: -*- python -*-
+#coding:gbk
+
+#注意：在此目录下你无法comake2 -UB，comake2会抱怨baidu-rpc是本目录的父节点，
+#如果你要运行本项目，得先在baidu-rpc目录下comake2 -UB后回到本目录comake2 -P。
+#你自己的项目不会有这个问题（因为不会是baidu-rpc的子目录）
+
+#到代码树根目录的相对路径
+WORKROOT('../../')
+
+#C++编译参数.
+CPPFLAGS('-g -pipe -W -Wall -Werror -fPIC -Wno-deprecated --std=c++11')
+#在目前的版本中，只要用到baidu-rpc的项目都强烈建议加下面一行,以避免在gcc4下的误优化
+CPPFLAGS('-D__const__=')
+
+#为了方便本例通过comake2 -UB下载依赖，我们直接import上层baidu-rpc的依赖，
+CONFIGS('public/baidu-rpc@ci-base')
+
+#CONFIGS('lib2-64/wordner@wordner_3-0-0-3_PD_BL')
+#CONFIGS('lib2-64/wordrank@wordrank_2-0-5-0_PD_BL')
+#CONFIGS('lib2-64/postag@postag_1-3-6-0_PD_BL')
+#CONFIGS('lib2-64/postag-ex@postag-ex_1-0-4-0_PD_BL')
+#CONFIGS('lib2-64/wordseg@wordseg_3-0-13-0_PD_BL')
+#CONFIGS('lib2-64/ullib@ullib_3-1-100-0_PD_BL')
+#CONFIGS('public/odict@odict_1-1-4-2_PD_BL')
+#CONFIGS('lib2-64/others-ex@others-ex_3-1-15-0_PD_BL')
+CONFIGS('lib2-64/libcrf@libcrf_2-1-6-0_PD_BL')
+#CONFIGS('lib2-64/ccode@ccode_3-5-4-0_PD_BL')
+#CONFIGS('app/ecom/im/im-lib@im-lib_3-0-46-4_PD_BL')
+#CONFIGS('third-64/protobuf@protobuf_2-4-1-500_PD_BL')
+#CONFIGS('lib2-64/bsl@bsl_1-1-8-0_PD_BL')
+#CONFIGS('public/bslext@bslext_1-1-7-0_PD_BL')
+CONFIGS('app/ecom/im/xbuiltin@xbuiltin_1-0-6_BRANCH@COMAKE')
+
+#链接参数.
+LDFLAGS('-lpthread -lrt -ldl -lz')
+PROTOFLAGS('--proto_path=../../app/ecom/im/xbuiltin/output/include/',
+    '--proto_path=../../third-64/protobuf/include/',
+    '--plugin=protoc-gen-xbuiltin=../../app/ecom/im/xbuiltin/output/bin/xbuiltin-generator --xbuiltin_out proto')
+
+#这是支持.proto作为源文件必须的
+PROTOC("../../third-64/protobuf/bin/protoc")
+
+
+INCPATHS('src')
+rtb_incpath= \
+    ' . ' + \
+    ' ./include/ ' + \
+    './proto '
+
+LIBS('./lib/libmkl_core.a')
+LIBS('./lib/libmkl_sequential.a')
+LIBS('./lib/libmkl_intel_lp64.a')
+LIBS('./lib/libyaml-cpp.a')
+LIBS('./lib/libhiredis.so.0.10')
+LIBS('./lib/libmysqlclient.so.18')
+
+#可执行文件
+Application('http_server', Sources(GLOB('src/*.cpp proto/*.proto'),IncludePaths(rtb_incpath)))
+#Application('http_server', Sources(GLOB('src1/*.cpp proto/*.proto'),IncludePaths(rtb_incpath)))
+#Application('dsp_client', Sources('proto/http_server.proto proto/baidu_realtime_bidding.proto client/client.cpp',IncludePaths(rtb_incpath)))
+#Application('win_notice', Sources('proto/win_notice.proto winnotice/win_notice.cpp',IncludePaths(rtb_incpath)))
