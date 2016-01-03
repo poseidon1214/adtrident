@@ -16,8 +16,9 @@
 #include <deque>
 #include <fstream>
 #include "http_server.pb.h"
-#include "../src/RtbUtil.h"
-
+#include <string>
+#include <vector>
+#include <sstream>
 using std::vector;
 using std::string;
 
@@ -53,6 +54,22 @@ struct BAIDU_CACHELINE_ALIGNMENT SenderInfo {
 };
 std::deque<SenderInfo> g_sender_info;
 
+void split(const std::string& s, const std::string& delim,std::vector<std::string>& out_array)
+{
+    size_t last = 0;
+    size_t index=s.find_first_of(delim,last);
+    while (index!=std::string::npos)
+    {
+        out_array.push_back(s.substr(last,index-last));
+        last=index+1;
+        index=s.find_first_of(delim,last);
+    }
+    if (index-last>0)
+    {
+        out_array.push_back(s.substr(last,index-last));
+    }
+}
+
 void fill_buff(vector<vector<std::string> >& request_buf)
 {
     std::ifstream infile;
@@ -60,7 +77,7 @@ void fill_buff(vector<vector<std::string> >& request_buf)
     string line;
     while(std::getline(infile, line)) {
         std::vector<std::string> arr;
-        ad::rtb::split(line , "\t", arr);
+        split(line , "\t", arr);
         request_buf.push_back(arr);
     }
     infile.close();

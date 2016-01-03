@@ -9,7 +9,7 @@
 WORKROOT('../../../')
 
 #C++编译参数.
-CPPFLAGS('-g -O2 -pipe -W -Wall -Werror -fPIC -Wno-deprecated --std=c++11')
+CPPFLAGS('-g -pipe -W -Wall -Werror -fPIC -Wno-deprecated --std=c++11')
 #在目前的版本中，只要用到baidu-rpc的项目都强烈建议加下面一行,以避免在gcc4下的误优化
 CPPFLAGS('-D__const__=')
 
@@ -22,10 +22,5 @@ LDFLAGS('-lpthread -lrt -ldl -lz')
 #这是支持.proto作为源文件必须的
 PROTOC("../../../third-64/protobuf/bin/protoc")
 
-rtb_incpath= \
-    ' . ' + \
-    ' ../include/ ' + \
-    '../proto '
-
 #可执行文件
-Application('dsp_client', Sources('../proto/http_server.proto ../proto/baidu_realtime_bidding.proto ./client.cpp ../src/RtbUtil.cpp',IncludePaths(rtb_incpath)))
+Application('dsp_client', Sources('http_server.proto baidu_realtime_bidding.proto client.cpp'))

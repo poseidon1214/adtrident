@@ -1,0 +1,9 @@
+mysql_db:
+ mysql_host: localhost 
+ mysql_port: 3306 
+ mysql_user: root
+ mysql_pwd: 111111
+ mysql_database: adtrident_db 
+redis_db:
+ redis_host: localhost
+ redis_port: 6379 

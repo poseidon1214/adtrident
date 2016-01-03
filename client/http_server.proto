@@ -1,0 +1,15 @@
+package AdxRtb;
+
+import "baidu_realtime_bidding.proto";
+
+option cc_generic_services = true;
+
+message HttpRequest {
+}
+
+message HttpResponse {
+}
+
+service HttpService {
+    rpc Rtb(HttpRequest) returns (HttpResponse);
+};

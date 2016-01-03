@@ -6,7 +6,6 @@ CXX=g++
 CXXFLAGS=
 CFLAGS=
 CPPFLAGS=-g \
-  -O2 \
   -pipe \
   -W \
   -Wall \
@@ -99,7 +98,7 @@ CCP_FLAGS=
 
 
 #COMAKE UUID
-COMAKE_MD5=833dc2448c50ff5a93fc373a94df052d  COMAKE
+COMAKE_MD5=f3b4ef086ebb9af474aa17b4ccbc5f8f  COMAKE
 
 
 .PHONY:all
@@ -125,14 +124,13 @@ clean:ccpclean
 	@echo "[[1;32;40mCOMAKE:BUILD[0m][Target:'[1;32;40mclean[0m']"
 	rm -rf dsp_client
 	rm -rf ./output/bin/dsp_client
-	rm -rf ../proto/http_server.pb.cc
-	rm -rf ../proto/http_server.pb.h
-	rm -rf ../proto/dsp_client_http_server.pb.o
-	rm -rf ../proto/baidu_realtime_bidding.pb.cc
-	rm -rf ../proto/baidu_realtime_bidding.pb.h
-	rm -rf ../proto/dsp_client_baidu_realtime_bidding.pb.o
+	rm -rf ./http_server.pb.cc
+	rm -rf ./http_server.pb.h
+	rm -rf ./dsp_client_http_server.pb.o
+	rm -rf ./baidu_realtime_bidding.pb.cc
+	rm -rf ./baidu_realtime_bidding.pb.h
+	rm -rf ./dsp_client_baidu_realtime_bidding.pb.o
 	rm -rf dsp_client_client.o
-	rm -rf ../src/dsp_client_RtbUtil.o
 
 .PHONY:dist
 dist:
@@ -151,15 +149,13 @@ love:
 	@echo "[[1;32;40mCOMAKE:BUILD[0m][Target:'[1;32;40mlove[0m']"
 	@echo "make love done"
 
-dsp_client:../proto/dsp_client_http_server.pb.o \
-  ../proto/dsp_client_baidu_realtime_bidding.pb.o \
-  dsp_client_client.o \
-  ../src/dsp_client_RtbUtil.o
+dsp_client:dsp_client_http_server.pb.o \
+  dsp_client_baidu_realtime_bidding.pb.o \
+  dsp_client_client.o
 	@echo "[[1;32;40mCOMAKE:BUILD[0m][Target:'[1;32;40mdsp_client[0m']"
-	$(CXX) ../proto/dsp_client_http_server.pb.o \
-  ../proto/dsp_client_baidu_realtime_bidding.pb.o \
-  dsp_client_client.o \
-  ../src/dsp_client_RtbUtil.o -Xlinker "-("  ../../../lib2-64/ullib/lib/libullib.a \
+	$(CXX) dsp_client_http_server.pb.o \
+  dsp_client_baidu_realtime_bidding.pb.o \
+  dsp_client_client.o -Xlinker "-("  ../../../lib2-64/ullib/lib/libullib.a \
   ../../../op/oped/noah/webfoot/naming-lib/output/lib/libwebfoot_naming.a \
   ../../../public/baidu-rpc/libbdrpc.a \
   ../../../public/bthread/libbthread.a \
@@ -194,49 +190,37 @@ dsp_client:../proto/dsp_client_http_server.pb.o \
 	mkdir -p ./output/bin
 	cp -f dsp_client ./output/bin
 
-../proto/http_server.pb.cc \
-  ../proto/http_server.pb.h:../proto/http_server.proto
-	@echo "[[1;32;40mCOMAKE:BUILD[0m][Target:'[1;32;40m../proto/http_server.pb.cc \
-  ../proto/http_server.pb.h[0m']"
-	../../../third-64/protobuf/bin/protoc --cpp_out=../proto --proto_path=../proto  ../proto/http_server.proto
+./http_server.pb.cc \
+  ./http_server.pb.h:http_server.proto
+	@echo "[[1;32;40mCOMAKE:BUILD[0m][Target:'[1;32;40m./http_server.pb.cc \
+  ./http_server.pb.h[0m']"
+	../../../third-64/protobuf/bin/protoc --cpp_out=./ --proto_path=./  http_server.proto
 
-../proto/http_server.proto:
-	@echo "[[1;32;40mCOMAKE:BUILD[0m][Target:'[1;32;40m../proto/http_server.proto[0m']"
+http_server.proto:
+	@echo "[[1;32;40mCOMAKE:BUILD[0m][Target:'[1;32;40mhttp_server.proto[0m']"
 	@echo "ALREADY BUILT"
 
-../proto/dsp_client_http_server.pb.o:../proto/http_server.pb.cc
-	@echo "[[1;32;40mCOMAKE:BUILD[0m][Target:'[1;32;40m../proto/dsp_client_http_server.pb.o[0m']"
-	$(CXX) -c -I. \
-  -I../include/ \
-  -I../proto $(DEP_INCPATH) $(CPPFLAGS) $(CXXFLAGS)  -o ../proto/dsp_client_http_server.pb.o ../proto/http_server.pb.cc
+./dsp_client_http_server.pb.o:./http_server.pb.cc
+	@echo "[[1;32;40mCOMAKE:BUILD[0m][Target:'[1;32;40m./dsp_client_http_server.pb.o[0m']"
+	$(CXX) -c $(INCPATH) $(DEP_INCPATH) $(CPPFLAGS) $(CXXFLAGS)  -o ./dsp_client_http_server.pb.o ./http_server.pb.cc
 
-../proto/baidu_realtime_bidding.pb.cc \
-  ../proto/baidu_realtime_bidding.pb.h:../proto/baidu_realtime_bidding.proto
-	@echo "[[1;32;40mCOMAKE:BUILD[0m][Target:'[1;32;40m../proto/baidu_realtime_bidding.pb.cc \
-  ../proto/baidu_realtime_bidding.pb.h[0m']"
-	../../../third-64/protobuf/bin/protoc --cpp_out=../proto --proto_path=../proto  ../proto/baidu_realtime_bidding.proto
+./baidu_realtime_bidding.pb.cc \
+  ./baidu_realtime_bidding.pb.h:baidu_realtime_bidding.proto
+	@echo "[[1;32;40mCOMAKE:BUILD[0m][Target:'[1;32;40m./baidu_realtime_bidding.pb.cc \
+  ./baidu_realtime_bidding.pb.h[0m']"
+	../../../third-64/protobuf/bin/protoc --cpp_out=./ --proto_path=./  baidu_realtime_bidding.proto
 
-../proto/baidu_realtime_bidding.proto:
-	@echo "[[1;32;40mCOMAKE:BUILD[0m][Target:'[1;32;40m../proto/baidu_realtime_bidding.proto[0m']"
+baidu_realtime_bidding.proto:
+	@echo "[[1;32;40mCOMAKE:BUILD[0m][Target:'[1;32;40mbaidu_realtime_bidding.proto[0m']"
 	@echo "ALREADY BUILT"
 
-../proto/dsp_client_baidu_realtime_bidding.pb.o:../proto/baidu_realtime_bidding.pb.cc
-	@echo "[[1;32;40mCOMAKE:BUILD[0m][Target:'[1;32;40m../proto/dsp_client_baidu_realtime_bidding.pb.o[0m']"
-	$(CXX) -c -I. \
-  -I../include/ \
-  -I../proto $(DEP_INCPATH) $(CPPFLAGS) $(CXXFLAGS)  -o ../proto/dsp_client_baidu_realtime_bidding.pb.o ../proto/baidu_realtime_bidding.pb.cc
+./dsp_client_baidu_realtime_bidding.pb.o:./baidu_realtime_bidding.pb.cc
+	@echo "[[1;32;40mCOMAKE:BUILD[0m][Target:'[1;32;40m./dsp_client_baidu_realtime_bidding.pb.o[0m']"
+	$(CXX) -c $(INCPATH) $(DEP_INCPATH) $(CPPFLAGS) $(CXXFLAGS)  -o ./dsp_client_baidu_realtime_bidding.pb.o ./baidu_realtime_bidding.pb.cc
 
 dsp_client_client.o:client.cpp
 	@echo "[[1;32;40mCOMAKE:BUILD[0m][Target:'[1;32;40mdsp_client_client.o[0m']"
-	$(CXX) -c -I. \
-  -I../include/ \
-  -I../proto $(DEP_INCPATH) $(CPPFLAGS) $(CXXFLAGS)  -o dsp_client_client.o client.cpp
-
-../src/dsp_client_RtbUtil.o:../src/RtbUtil.cpp
-	@echo "[[1;32;40mCOMAKE:BUILD[0m][Target:'[1;32;40m../src/dsp_client_RtbUtil.o[0m']"
-	$(CXX) -c -I. \
-  -I../include/ \
-  -I../proto $(DEP_INCPATH) $(CPPFLAGS) $(CXXFLAGS)  -o ../src/dsp_client_RtbUtil.o ../src/RtbUtil.cpp
+	$(CXX) -c $(INCPATH) $(DEP_INCPATH) $(CPPFLAGS) $(CXXFLAGS)  -o dsp_client_client.o client.cpp
 
 endif #ifeq ($(shell uname -m),x86_64)
 
