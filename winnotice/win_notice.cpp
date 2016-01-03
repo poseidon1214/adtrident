@@ -20,8 +20,8 @@ DEFINE_int32(idle_timeout_s, -1, "Connection will be closed if there is no "
              "read/write operations during the last `idle_timeout_s'");
 DEFINE_int32(logoff_ms, 2000, "Maximum duration of server's LOGOFF state "
              "(waiting for client to close connection before server stops)");
-DEFINE_string(config_path, "./conf/config.yaml", "config.yaml path");
-DEFINE_string(log_config_path, "./conf/log.conf", "config.yaml path");
+//DEFINE_string(config_path, "../conf/config.yaml", "config.yaml path");
+//DEFINE_string(log_config_path, "../conf/log.conf", "config.yaml path");
 
 // Your implementation of example::HttpService
 namespace ad {
@@ -94,8 +94,8 @@ int main(int argc, char* argv[]) {
     google::ParseCommandLineFlags(&argc, &argv, true);
 
     logging::SetLogSink(logging::ComlogSink::GetInstance());
-    if (logging::ComlogSink::GetInstance()->SetupFromConfig("conf/winnotice_log.conf") != 0) {
-        LOG(ERROR) << "Fail to setup comlog from conf/winnotice_log.conf";
+    if (logging::ComlogSink::GetInstance()->SetupFromConfig("win_notice_log.conf") != 0) {
+        LOG(ERROR) << "Fail to setup comlog from win_notice_log.conf";
         return -1;
     }
     baidu::rpc::Server server;
