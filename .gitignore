@@ -26,3 +26,8 @@
 *.exe
 *.out
 *.app
+
+#binary
+dsp_client
+http_server
+win_notice
